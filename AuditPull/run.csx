@@ -5,17 +5,31 @@ using System;
 
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
-    string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+    string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["AuditDb"].ConnectionString;
     string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
     string clientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["ClientSecret"].ConnectionString;
     string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
     string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
+	int daysToRetrieve;
+	daysToRetrieve = 7;
+	
+    for (int i = 0; i < daysToRetrieve; i++)
+	{
+		DateTime dateToProcess = DateTime.UtcNow.AddDays(-1*i);
+		try
+		{
+			Console.ForegroundColor = ConsoleColor.White;
+			ConsoleWriter.WriteLine("\nProcessing " + dateToProcess);
+			var result =
+				O365ETL.GetOfficeData.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema).Result;
 
-    for(int i=0; i< 8; i++)
-    {
-        DateTime dateToProcess = DateTime.UtcNow.AddDays(-1 * i);
-        var result = O365ETL.GetOfficeData.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema).Result;
-    }
-
-    O365ETL.SQLOperations.RunStoredProc(connstring, schema + ".uspMoveStagingToAuditLog");
+		}
+		catch (Exception ex)
+		{
+			ConsoleWriter.WriteLine(ex.Message);
+		}
+	}
+	
+	O365ETL.SQLOperations.CreateSP(schema);
+	O365ETL.SQLOperations.RunStoredProc(connstring, schema + ".uspMoveStaging");
 }
