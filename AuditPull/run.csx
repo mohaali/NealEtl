@@ -25,7 +25,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 		}
 		catch (Exception ex)
 		{
-			throw(ex)
+			throw(ex);
 		}
 	}
 	
