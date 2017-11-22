@@ -18,15 +18,14 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 		DateTime dateToProcess = DateTime.UtcNow.AddDays(-1*i);
 		try
 		{
-			Console.ForegroundColor = ConsoleColor.White;
-			ConsoleWriter.WriteLine("\nProcessing " + dateToProcess);
+			
 			var result =
 				O365ETL.GetOfficeData.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema).Result;
 
 		}
 		catch (Exception ex)
 		{
-			ConsoleWriter.WriteLine(ex.Message);
+			throw(ex);
 		}
 	}
 	
