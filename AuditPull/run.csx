@@ -29,6 +29,6 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 		}
 	}
 	
-	O365ETL.SQLOperations.CreateSP(schema);
+	O365ETL.SQLOperations.CreateSP(schema, connstring);
 	O365ETL.SQLOperations.RunStoredProc(connstring, schema + ".uspMoveStaging");
 }
