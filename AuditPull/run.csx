@@ -11,7 +11,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
     string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
     string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
 	int daysToRetrieve;
-	daysToRetrieve = 7;
+	daysToRetrieve = 2;
 	
     for (int i = 0; i < daysToRetrieve; i++)
 	{
