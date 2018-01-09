@@ -5,7 +5,7 @@ using System;
 
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
-	O365ETL.ConsoleWriter.Writer = log;
+	O365ETL.ConsoleWriter.GetInstance().Writer = log;
 	SQLOperations opsInstance = SQLOperations.GetInstance();
 	opsInstance.Writer = log;
     string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["AuditDb"].ConnectionString;
