@@ -6,7 +6,8 @@ using System;
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
 	O365ETL.ConsoleWriter.Writer = log;
-	O365ETL.SQLOperations.Writer = log;
+	SQLOperations opsInstance = SQLOperations.GetInstance()
+	opsInstance.Writer = log;
     string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["AuditDb"].ConnectionString;
     string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
     string clientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["ClientSecret"].ConnectionString;
@@ -31,6 +32,6 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 		}
 	}
 	
-	O365ETL.SQLOperations.CreateSP(schema, connstring);
-	O365ETL.SQLOperations.RunStoredProc(connstring, schema + ".uspMoveStaging");
+	opsInstance.CreateSP(schema, connstring);
+	opsInstance.RunStoredProc(connstring, schema + ".uspMoveStaging");
 }
