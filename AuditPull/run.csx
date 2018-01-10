@@ -16,7 +16,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 	O365ETL.SQLOperations opsInstance = O365ETL.SQLOperations.GetInstance(connstring);
 	opsInstance.Writer = log;
 	int daysToRetrieve;
-	daysToRetrieve = 1;
+	daysToRetrieve = 2;
 	
     for (int i = 0; i < daysToRetrieve; i++)
 	{
