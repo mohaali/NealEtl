@@ -7,13 +7,14 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 {
 	O365ETL.ConsoleWriter.GetInstance().Writer = log;
 	
-	opsInstance.Writer = log;
+	
     string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["AuditDb"].ConnectionString;
     string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
     string clientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["ClientSecret"].ConnectionString;
     string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
     string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
 	O365ETL.SQLOperations opsInstance = O365ETL.SQLOperations.GetInstance(connstring);
+	opsInstance.Writer = log;
 	int daysToRetrieve;
 	daysToRetrieve = 1;
 	
