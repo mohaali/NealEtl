@@ -2,7 +2,7 @@
 
 using System;
 
-//6:45
+//6:46
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
 	O365ETL.ConsoleWriter.GetInstance().Writer = log;
@@ -33,6 +33,6 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
 		}
 	}
 	
-	opsInstance.CreateSP(schema, connstring);
-	opsInstance.RunStoredProc(connstring, schema + ".uspMoveStaging");
+	opsInstance.CreateSP(schema);
+	opsInstance.RunStoredProc(schema + ".uspMoveStaging");
 }
