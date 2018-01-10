@@ -2,7 +2,7 @@
 
 using System;
 
-
+//5:32
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
 	O365ETL.ConsoleWriter.GetInstance().Writer = log;
@@ -14,7 +14,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
     string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
     string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
 	int daysToRetrieve;
-	daysToRetrieve = 2;
+	daysToRetrieve = 1;
 	
     for (int i = 0; i < daysToRetrieve; i++)
 	{
