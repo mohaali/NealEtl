@@ -2,7 +2,6 @@
 
 using System;
 
-//6:46
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
 	O365ETL.ConsoleWriter.GetInstance().Writer = log;
