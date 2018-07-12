@@ -11,9 +11,10 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
     string clientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["ClientSecret"].ConnectionString;
     string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
     string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
+    string productKey = System.Configuration.ConfigurationManager.ConnectionStrings["ProductKey"].ConnectionString;
 	
-    O365ETL.SQLOperations opsInstance = O365ETL.SQLOperations.GetInstance(connstring);
-    opsInstance.Writer = log;
+    var opsInstance = O365ETL.SQLClient.GetInstance(connstring, schema);
+        opsInstance.Writer = log;
 	
     const int daysToRetrieve = 2;
 	
@@ -22,13 +23,13 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
 		DateTime dateToProcess = DateTime.UtcNow.AddDays(-1*i);
 		try
 		{
-			var result = O365ETL.GetOfficeData.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema).Result;
+			var result = O365ETL.Processor.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema, productKey).Result;
 		}
 		catch (Exception ex)
 		{
 			throw(ex);
 		}
 	}
-	opsInstance.CreateSP(schema);
+	opsInstance.CreateSP();
 	opsInstance.RunStoredProc(schema + ".uspMoveStaging");
 }
