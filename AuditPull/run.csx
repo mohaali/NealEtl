@@ -26,10 +26,11 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
         try
         {
             log.Info($"Processing: {dateToProcess}");
-            var result = Processor.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema, productKey).Result;
+            var result = Processor.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema, productKey);
         }
         catch (Exception ex)
         {
+            log.Info(ex.Message);
             throw (ex);
         }
     }
