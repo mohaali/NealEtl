@@ -17,7 +17,7 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
 	
     var opsInstance = SQLClient.GetInstance(connstring, schema, log);
 	
-    const int daysToRetrieve = 3;
+    const int daysToRetrieve = 2;
 
     for (int i = daysToRetrieve - 1; i >= 0; i--)
     {
