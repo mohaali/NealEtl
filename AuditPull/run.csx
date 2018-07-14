@@ -15,10 +15,9 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
     string clientId = ConfigurationManager.ConnectionStrings["ClientId"]?.ConnectionString;
     string productKey = ConfigurationManager.ConnectionStrings["ProductKey"]?.ConnectionString;
 	
-    var opsInstance = SQLClient.GetInstance(connstring, schema);
-    opsInstance.Writer = log;
+    var opsInstance = SQLClient.GetInstance(connstring, schema, log);
 	
-    const int daysToRetrieve = 2;
+    const int daysToRetrieve = 3;
 
     for (int i = daysToRetrieve - 1; i >= 0; i--)
     {
@@ -34,8 +33,6 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
             throw (ex);
         }
     }
-    log.Info($"Move from Staging Start");
     opsInstance.CreateSP();
     opsInstance.RunStoredProc($"uspMoveStaging");
-    log.Info($"Move from Staging Complete");
 }
