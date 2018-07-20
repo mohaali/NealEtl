@@ -32,7 +32,10 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
             log.Info(ex.Message);
             throw (ex);
         }
+        finally
+        {
+            opsInstance.CreateSP();
+            opsInstance.RunStoredProc($"uspMoveStaging");
+        }
     }
-    opsInstance.CreateSP();
-    opsInstance.RunStoredProc($"uspMoveStaging");
 }
