@@ -1,38 +1,38 @@
 #r "O365ETL.dll"
 
 using System;
+using System.Configuration;
+using O365ETL;
 
-public static void Run(TimerInfo myTimer, TraceWriter log)
+public static void Run(TimerInfo pbiTimer, TraceWriter log)
 {
-	O365ETL.ConsoleWriter.GetInstance().Writer = log;
-	
-	
-    string connstring =  System.Configuration.ConfigurationManager.ConnectionStrings["AuditDb"].ConnectionString;
-    string schema = System.Configuration.ConfigurationManager.ConnectionStrings["Schema"].ConnectionString;
-    string clientSecret = System.Configuration.ConfigurationManager.ConnectionStrings["ClientSecret"].ConnectionString;
-    string tenant = System.Configuration.ConfigurationManager.ConnectionStrings["Tenant"].ConnectionString;
-    string clientId = System.Configuration.ConfigurationManager.ConnectionStrings["ClientId"].ConnectionString;
-	O365ETL.SQLOperations opsInstance = O365ETL.SQLOperations.GetInstance(connstring);
-	opsInstance.Writer = log;
-	int daysToRetrieve;
-	daysToRetrieve = 2;
-	
-    for (int i = 0; i < daysToRetrieve; i++)
-	{
-		DateTime dateToProcess = DateTime.UtcNow.AddDays(-1*i);
-		try
-		{
-			
-			var result =
-				O365ETL.GetOfficeData.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema).Result;
+	ConsoleWriter.GetInstance().Writer = log;
 
-		}
-		catch (Exception ex)
-		{
-			throw(ex);
-		}
-	}
+    string connstring = ConfigurationManager.ConnectionStrings["AuditDb"]?.ConnectionString;
+    string schema = ConfigurationManager.ConnectionStrings["Schema"]?.ConnectionString;
+    string clientSecret = ConfigurationManager.ConnectionStrings["ClientSecret"]?.ConnectionString;
+    string tenant = ConfigurationManager.ConnectionStrings["Tenant"]?.ConnectionString;
+    string clientId = ConfigurationManager.ConnectionStrings["ClientId"]?.ConnectionString;
+    string productKey = ConfigurationManager.ConnectionStrings["ProductKey"]?.ConnectionString;
 	
-	opsInstance.CreateSP(schema);
-	opsInstance.RunStoredProc(schema + ".uspMoveStaging");
+    var opsInstance = SQLClient.GetInstance(connstring, schema, log);
+	
+    const int daysToRetrieve = 2;
+
+    for (int i = daysToRetrieve - 1; i >= 0; i--)
+    {
+        DateTime dateToProcess = DateTime.UtcNow.AddDays(-1 * i);
+        try
+        {
+            log.Info($"Processing: {dateToProcess}");
+            var result = Processor.Process(clientId, clientSecret, tenant, dateToProcess, connstring, schema, productKey);
+        }
+        catch (Exception ex)
+        {
+            log.Info(ex.Message);
+            throw (ex);
+        }
+    }
+    opsInstance.CreateSP();
+    opsInstance.RunStoredProc($"uspMoveStaging");
 }
