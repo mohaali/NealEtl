@@ -36,6 +36,7 @@ public static void Run(TimerInfo pbiTimer, TraceWriter log)
         {
             opsInstance.CreateSP();
             opsInstance.RunStoredProc($"uspMoveStaging");
+            log.Info($"Processing: {dateToProcess} completed.");
         }
     }
 }
