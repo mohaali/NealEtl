@@ -7,7 +7,7 @@ using O365ETL;
 public static void Run(TimerInfo pbiTimer, TraceWriter log)
 {
 	ConsoleWriter.Writer = log;
-    ConsoleWriter.IsSilent = true;
+    ConsoleWriter.IsSilent = false;
 
     string productKey = ConfigurationManager.ConnectionStrings["ProductKey"]?.ConnectionString;
     string clientId = ConfigurationManager.ConnectionStrings["ClientId"]?.ConnectionString;
